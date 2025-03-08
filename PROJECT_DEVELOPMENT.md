@@ -34,6 +34,22 @@
 
 ## Functional Specifications
 - - - 
-### 
+### User Requirements
+The user should easily be able to navigate the program. This statements only applies if the user is allowed access. The user should be allowed to manage and change the themes of GUI according to her prefrences. The user should also be allowed to choose
+
+### Inputs and Outputs
+The user be be able to input what data/information they are trying to find. In respone the GUI should output the info back.
+
+### Core Features
+The main purpose of this GUI is to proivde users with finding info easily. Buttons and commands must be easy to navigate and should not redirect to a different route. It is critical that this GUI meets user request otherwise the GUI is faulty and should not continue
+
+### User Interaction
+The Data is be viewed on a GUI. They can either press buttons or search from the bar
+
+### Error Handling
+The GUI should not crash and hand common errors gracefully. If there is an error it will restart the program and notify the devloper
+
+
+
 
 
