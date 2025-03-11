@@ -49,7 +49,39 @@ The Data is be viewed on a GUI. They can either press buttons or search from the
 ### Error Handling
 The GUI should not crash and hand common errors gracefully. If there is an error it will restart the program and notify the devloper
 
+## Gantt Chart
+- - -
+![Alt text](Screenshot%202025-03-10%20102117.png)
 
+## Structure Chart
+- - -
+![Alt text](Screenshot%202025-03-10%20104807.png)
 
+## Algorithms
+- - -
+![Alt text](Screenshot%202025-03-11%20143525.png)
 
+## PseudoCode
+BEGIN main()
+choice = 0
+    WHILE choice is not 9
+        INPUT choice
+        IF choice is 1 THEN
+            View Status
+            IF API Request Valid THEN
+                SearchCar
+            ELSE
+                DISPLAY 'An error has occurred, restarting program'
+            ENDIF
+        ELSEIF choice is 2 THEN
+            ViewFavourites
+        ELIF choice is 3 THEN
+            View3DModel
+        ELSE
+            DISPLAY 'An error has occurred, restarting program'
+        ENDIF
+    ENDWHILE
+END main()    
+
+## Data Dictionary
 
