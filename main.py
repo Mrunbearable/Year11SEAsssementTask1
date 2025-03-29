@@ -1,45 +1,41 @@
-from dotenv import load_dotenv
-import os
-import base64
-from requests import post, get
-import json
+import requests
+from pprint import pprint
 
-load_dotenv()
+SPOTIFY_GET_CURRENT_TRACK_URL = 'https://api.spotify.com/v1/me/player'
+SPOTIFY_ACCESS_TOKEN = 'BQA9v53mEFo5txN0faebXYI6rQDHInWM1OcOVsrrY-kPeK5hMSSOB2ed2UhiophZG4IMGQAci9GCQ2o7Lr2DQ4oma-lmRkRCIJAiCnA5nec-_TpaJA6GpP1AZwK8HwEsYu473f5Qk0o'
 
-client_id = os.getenv("CLIENT_ID")
-client_secret = os.getenv("CLIENT_SECRET")
+def get_current_track(access_token):
+    response = requests.get(
+        SPOTIFY_GET_CURRENT_TRACK_URL,
+        headers={
+            "Authorization": f"Bearer {access_token}"
+        }
+    )
+    resp_json = response.json()
 
-def get_token():
-    auth_string = str(client_id) + ":" + str(client_secret)
-    auth_bytes = auth_string.encode("utf-8")
-    auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
+    track_id = resp_json['item']['id']
+    track_name = resp_json['item']['name']
+    artists = resp_json['item']['artists']
+    artists_names = ','.join([artist['name'] for artist in artists]
+    )
+    link = resp_json['item']['external_urls']['spotify']
 
-    url = "https://accounts.spotify.com/api/token"
-    headers = {
-        "Authorization": "Basic " + auth_base64,
-        "Content-Type": "application/x-www-form-urlencoded"
+    current_track_info = {
+        "id": track_id,
+        "name": track_name,
+        "artists": artists_names,
+        "link": link
     }
 
-    data = {"grant_type": "client_credentials"} 
-    result = post(url, headers=headers, data=data)
-    json_result = json.loads(result.content)
-    token = json_result["access_token"]
-    return token
+    return current_track_info
 
-def get_auth_header(token):
-    return{"Authorization": "Bearer " + token}
+def main():
+    current_track_info = get_current_track(
+        SPOTIFY_ACCESS_TOKEN
+    )
 
-def search_for_artist(token, artist_name):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    query = f"q={artist_name}&type=artist&limit=1"
-
-    query_url = url + query
-    result = get(query_url, headers=headers)
-    json_result = json.loads(result.content)
-    print(json_result)
-
-token = get_token() 
-search_for_artist(token, "ACDC")
-
-
+    pprint(current_track_info, indent=4)
+     
+    
+if __name__ == '__main__':
+    main()
