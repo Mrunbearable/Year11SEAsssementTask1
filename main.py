@@ -1,31 +1,45 @@
-import requests
+from dotenv import load_dotenv
+import os
+import base64
+from requests import post, get
+import json
 
-def main():
-    while True:
-        print("\nPokédex Menu:")
-        print("1. Search Pokémon")
-        print("2. Add Pokémon to Pokédex")
-        print("3. View Pokédex")
-        print("4. Remove Pokémon")
-        print("5. Exit")
-        choice = input("Choose an option: ")
+load_dotenv()
 
-        if choice == "1":
-            name = input("Enter Pokémon name or ID: ")
-            print(f"Search for {name}'s details") #Replace with function later
-        elif choice == "2":
-            name = input("Enter Pokémon name to add: ")
-            print(f"Add {name} to Pokedex") #Replace with function later
-        elif choice == "3":
-            print('View Pokedex') #Replace with function later
-        elif choice == "4":
-            name = input("Enter Pokémon name to remove: ")
-            print(f'Remove {name} from Pokedex') #Replace with function later
-        elif choice == "5":
-            print("Exiting Pokédex.")
-            break
-        else:
-            print("Invalid choice. Please try again.")
+client_id = os.getenv("CLIENT_ID")
+client_secret = os.getenv("CLIENT_SECRET")
 
-if __name__ == "__main__":
-    main()
+def get_token():
+    auth_string = str(client_id) + ":" + str(client_secret)
+    auth_bytes = auth_string.encode("utf-8")
+    auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
+
+    url = "https://accounts.spotify.com/api/token"
+    headers = {
+        "Authorization": "Basic " + auth_base64,
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    data = {"grant_type": "client_credentials"} 
+    result = post(url, headers=headers, data=data)
+    json_result = json.loads(result.content)
+    token = json_result["access_token"]
+    return token
+
+def get_auth_header(token):
+    return{"Authorization": "Bearer " + token}
+
+def search_for_artist(token, artist_name):
+    url = "https://api.spotify.com/v1/search"
+    headers = get_auth_header(token)
+    query = f"q={artist_name}&type=artist&limit=1"
+
+    query_url = url + query
+    result = get(query_url, headers=headers)
+    json_result = json.loads(result.content)
+    print(json_result)
+
+token = get_token() 
+search_for_artist(token, "ACDC")
+
+
