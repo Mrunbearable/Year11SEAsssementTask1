@@ -1,3 +1,5 @@
+import tkinter as tk
+from tkinter import *
 from dotenv import load_dotenv
 import os
 import base64
@@ -88,7 +90,7 @@ while True:
     print("3. Description of Artist")
     print("4. Images of the Artist ")
     print("5. End Program")
-    response = int(input("Enter a Number"))
+    response = int(input("Enter a Number "))
 
     result = search_for_artist(token, user_need)
     artist_id = result["id"]
@@ -115,6 +117,11 @@ while True:
     if learn_more != "yes":
         print("Ending Program")
         break
+
+
+
+
+
 
 
 
