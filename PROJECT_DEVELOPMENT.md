@@ -55,33 +55,42 @@ The GUI should not crash and hand common errors gracefully. If there is an error
 
 ## Structure Chart
 - - -
-![Alt text](Screenshot%202025-03-10%20104807.png)
+![Alt text](Structure%20Chart.png)
 
 ## Algorithms
 - - -
-![Alt text](Screenshot%202025-03-11%20143525.png)
+![Alt text](Blank%20diagram%20(1).png)
 
 ## PseudoCode
+```
 BEGIN main()
-choice = 0
-    WHILE choice is not 9
-        INPUT choice
-        IF choice is 1 THEN
-            View Status
-            IF API Request Valid THEN
-                SearchCar
+    INPUT parameter
+    choice=0
+        WHILE choice is not 7 THEN
+            INPUT choice
+            IF choice is 1 THEN
+                JobsByLocation
+            ELSEIF choice is 2 THEN
+                JobsBySector
+            ELSEIF choice is 3 THEN
+                PartTimeJobs
+            ELSEIF choice is 4 THEN
+                EntryLevelJobs
+            ELSEIF choice is 5 THEN
+                HybridJobs
+            ELIF choice is 6 THEN
+                RemoteJobs
             ELSE
                 DISPLAY 'An error has occurred, restarting program'
             ENDIF
-        ELSEIF choice is 2 THEN
-            ViewFavourites
-        ELIF choice is 3 THEN
-            View3DModel
-        ELSE
-            DISPLAY 'An error has occurred, restarting program'
-        ENDIF
-    ENDWHILE
+        ENDWHILE
 END main()    
-
+``` 
 ## Data Dictionary
+
+Variable|Data Type|Format for Display|Size in Bytes|Size for Display|Description|Example|Validation|
+|---|---|---|---|---|---|---|---
+|Name|string|xxx|50|50|The name of the job/title|Doctor|must be a valid string|
+|Location|string|xx_xx|20|100|The location of the job/title|Perth_WA|must be a valid string|
+|Date|interger|N/NN/NNNNN|4|2|The Date of the upload|19/20/2021|must be a valid date and correct format|
 
