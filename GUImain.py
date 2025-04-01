@@ -5,6 +5,7 @@ import os
 import base64
 from requests import post, get
 import json
+import webbrowser
 
 load_dotenv()
 
@@ -94,67 +95,67 @@ def search_artist(): #Function For Searching Artist
         "name": artist_info["name"],    
         "id": artist_id
     }
-    artist_details_frame.pack(fill="both", expand=True)
+    artist_details_frame.pack(fill="x", expand=True)
 
-    button_top_tracks.config(command=lambda: show_top_tracks(artist_id))    #Button for Top Tracks of Artist, which 
-    button_albums.config(command=lambda: show_albums(artist_id))            #Button for Albums by Artist
-    button_description.config(command=lambda: show_description(artist_id))  #Button for description of Artist
-    button_images.config(command=lambda: show_images(artist_id))            #Button for Image Url of Artist
-    buttons_exit.config(command=root.destroy)                               #Button for exits/stopping Program
-
-def show_top_tracks(artist_id):                                     #
-    tracks = get_songs_by_artist(token, artist_id)
-    result_text.delete(1.0, tk.END)
-    for idx, track in enumerate(tracks):
-        result_text.insert(tk.END, f"{idx + 1}. {track['name']}\n")
-
-def show_albums(artist_id):
-    albums = get_albums_by_artist(token, artist_id)
-    result_text.delete(1.0, tk.END)
-    for idx, album in enumerate(albums):
-        result_text.insert(tk.END, f"{idx + 1}. {album['name']} (Released: {album['release_date']})\n")
-
-def show_description(artist_id):
-    description = get_artist_description(token, artist_id)
-    result_text.delete(1.0, tk.END)
-    result_text.insert(tk.END, description)
-
-def show_images(artist_id):
-    images = get_artist_image(token, artist_id)
-    result_text.delete(1.0, tk.END)
-    for img in images:
-        result_text.insert(tk.END, f"Image URL: {img['url']}\n")
-
-def exit():
-    root.destroy()
+    top_tracks_button.config(command=lambda:display_top_tracks(artist_id))
+    albums_button.config(command=lambda: display_albums(artist_id))
+    artist_descripition_button.config(command=lambda: display_description(artist_id))
+    artist_images_button.config(command=lambda: display_images(artist_id))
+    exit_button.config(command=root.destroy)
 
 custom_font = font.Font(family="Roman", size=14)
+title_font = font.Font(family="Roman", size=25)
 
-title = tk.Label(root, text="Spotify Artist API", font=custom_font, fg='green')
+title = tk.Label(root, text="Spotify Artist API", font=title_font, fg='green')
 title.pack(padx=10, pady=20)
 artist_name = tk.Label(root, text="Enter Artist Name:", font=custom_font, fg='green')
-artist_name.pack(padx=10, pady=10)
+artist_name.pack(padx=10)
 artist_name_searchbar = tk.Entry(root, width=40, font=custom_font, fg='green')
 artist_name_searchbar.pack(padx=10, pady=10)
 search_button = tk.Button(root, text="Search Artist", command=search_artist, font=custom_font, fg='green')
 search_button.pack(padx=10, pady=10)
 
-artist_details_frame = tk.Frame(root)
+def display_top_tracks(artist_id):                                     
+    tracks = get_songs_by_artist(token, artist_id)
+    result_text.delete(1.0, tk.END)
+    for idx, track in enumerate(tracks):
+        result_text.insert(tk.END, f"{idx + 1}. {track['name']}\n")
 
-button_top_tracks = tk.Button(artist_details_frame, text="Top Tracks of Artist", font=custom_font, fg='green')
-button_top_tracks.pack(padx=10, pady=5)
-button_albums = tk.Button(artist_details_frame, text="Albums by Artist", font=custom_font, fg='green')
-button_albums.pack(padx=10, pady=5)
-button_description = tk.Button(artist_details_frame, text="Description of Artist", font=custom_font, fg='green')
-button_description.pack(padx=10, pady=5)
-button_images = tk.Button(artist_details_frame, text="Images of Artist", font=custom_font, fg='green')
-button_images.pack(padx=10, pady=5)
-buttons_exit = tk.Button(artist_details_frame, text="Exit", font=custom_font, fg='red')
-buttons_exit.pack(padx=10, pady=5)
+def display_albums(artist_id):
+    albums = get_albums_by_artist(token, artist_id)
+    result_text.delete(1.0, tk.END)
+    for idx, album in enumerate(albums):
+        result_text.insert(tk.END, f"{idx + 1}. {album['name']} (Released: {album['release_date']})\n")
+
+def display_description(artist_id):
+    description = get_artist_description(token, artist_id)
+    result_text.delete(1.0, tk.END)
+    result_text.insert(tk.END, description)
+
+def display_images(artist_id):
+    images = get_artist_image(token, artist_id)
+    result_text.delete(1.0, tk.END)
+    for img in images:
+        result_text.insert(tk.END, f"Image URL: {img['url']}\n")
+        webbrowser.open_new(img['url'])
+
+def exit():
+    root.destroy()
+
+artist_details_frame = tk.Frame(root)
+top_tracks_button = tk.Button(artist_details_frame, text="Top Tracks of Artist", font=custom_font, fg='green')
+top_tracks_button.pack(padx=10, pady=5)
+albums_button = tk.Button(artist_details_frame, text="Albums by Artist", font=custom_font, fg='green')
+albums_button.pack(padx=10, pady=5)
+artist_descripition_button = tk.Button(artist_details_frame, text="Description of Artist", font=custom_font, fg='green')
+artist_descripition_button.pack(padx=10, pady=5) 
+artist_images_button= tk.Button(artist_details_frame, text="Images of Artist", font=custom_font, fg='green')
+artist_images_button.pack(padx=10, pady=5)
+exit_button= tk.Button(artist_details_frame, text="Exit", font=custom_font, fg='red')
+exit_button.pack(padx=10, pady=5)
 
 result_text = scrolledtext.ScrolledText(root, width=100, height=15)
 result_text.pack(padx=10, pady=10)
-
 root.mainloop()
 
 
