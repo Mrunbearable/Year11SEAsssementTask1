@@ -55,42 +55,74 @@ The GUI should not crash and hand common errors gracefully. If there is an error
 
 ## Structure Chart
 - - -
-![Alt text](Structure%20Chart.png)
+![alt text](<Structure Chart Done.png>)
 
 ## Algorithms
 - - -
-![Alt text](Blank%20diagram%20(1).png)
-
+### Main Algorithm
+![Alt text](Blank%20diagram%202.png)
+### SubRountine1 Algorithm(TopTracksByArtist)
+![alt text](<2 and 3 (1).png>)
+### SubRountine2 Algorithm(ImagesOfArtist)
+![alt text](<2 and 3 (2).png>)
 ## PseudoCode
+### Main Algorithm Pseudocode
 ```
 BEGIN main()
     INPUT parameter
-    choice=0
-        WHILE choice is not 7 THEN
+    IF API request is THEN
+        choice=0
+    Else
+        "An error has occured restarting program"
+        WHILE choice is not 5 THEN
             INPUT choice
             IF choice is 1 THEN
-                JobsByLocation
+                TopTracksByArtist
             ELSEIF choice is 2 THEN
-                JobsBySector
+                AlbumsByArtist
             ELSEIF choice is 3 THEN
-                PartTimeJobs
+                DescriptionOfArtist
             ELSEIF choice is 4 THEN
-                EntryLevelJobs
-            ELSEIF choice is 5 THEN
-                HybridJobs
-            ELIF choice is 6 THEN
-                RemoteJobs
-            ELSE
-                DISPLAY 'An error has occurred, restarting program'
+                ImagesOfArtist
+            ELSEIf choice is 5 Then
+                Exit
+            Else 
+                OUTPUT "An error has occured restarting, program"
             ENDIF
         ENDWHILE
+END main()    
+``` 
+### SubRountine2 Algorithm(TopTracksOfArtist)
+```
+BEGIN TopTracksByArtist()
+    WHILE True
+    IF API request is THEN
+        OUTPUT TopTracksByArtist
+    Else
+        "An error has occured, restarting program"
+        ENDIF
+    ENDWHILE
+END TopTracksByArtist()    
+```
+### SubRountine2 Algorithm(TopTracksOfArtist)
+```
+BEGIN ImagesOfArtist()
+    INPUT Webbrowser
+    WHILE True
+    IF API request is THEN
+        OUTPUT Webbrowser
+        OUTPUT ImagesOfArtist
+    Else
+        "An error has occured, restarting program"
+        ENDIF
+    ENDWHILE
 END main()    
 ``` 
 ## Data Dictionary
 
 Variable|Data Type|Format for Display|Size in Bytes|Size for Display|Description|Example|Validation|
 |---|---|---|---|---|---|---|---
-|Name|string|xxx|50|50|The name of the job/title|Doctor|must be a valid string|
-|Location|string|xx_xx|20|100|The location of the job/title|Perth_WA|must be a valid string|
-|Date|interger|N/NN/NNNNN|4|2|The Date of the upload|19/20/2021|must be a valid date and correct format|
-
+|TopTracks|string, interger|N_xxx|50|50|Lists the Top Tracks of the Artist|1. Numb 2. In the End |must be a valid string|
+|Albums|string, interger|N_xxx|20|100|Lists All the albums uploaded by Artist|Perth_WA|must be a valid string|
+|Description|string, interger||4|2|Gives A brief Description of the artist|19/20/2021|must be a valid date and correct format|
+|Images|
