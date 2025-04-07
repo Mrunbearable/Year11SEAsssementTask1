@@ -154,7 +154,7 @@ artist_images_button.pack(padx=10, pady=5)
 exit_button= tk.Button(artist_details_frame, text="Exit", font=custom_font, fg='red')
 exit_button.pack(padx=10, pady=5)
 
-result_text = scrolledtext.ScrolledText(root, width=100, height=15)
+result_text = tk.Label(root, width=100, height=15)
 result_text.pack(padx=10, pady=10)
 root.mainloop()
 
