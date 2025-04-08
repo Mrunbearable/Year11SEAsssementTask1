@@ -166,8 +166,8 @@ Variable|Data Type|Format for Display|Size in Bytes|Size for Display|Description
 |---|---|---|---|---|---|---|---
 |TopTracks|string, interger|N_xxx|200|50|Lists the Top Tracks of the Artist|1. Numb 2. In the End 3. Points of Authority |must be a valid string|
 |Albums|string, interger|N_xxx|200|50|Lists All the albums uploaded by Artist|1. Hybrid Theory 2. Meteora 3. Minutes to Midnight|must be a valid string|
-|Description|string, interger|xxxxxxx|100|50|Gives A brief Description of the artist|Linkin park is a Nu-metal, alternative-metal, pop band founded in 1998. They have an overall popularity of 90% and currently have 29496112 followers|must be a valid date and correct format|
-|Images|string(URL), binary|URL format, Image|500|200|Gives the url and images of the artist|<img src="https://i.scdn.co/image/ab6761610000e5eba49c7eec5131a21a0bfb737b" alt="drawing" width="500"/>|Must be either an image or string of url
+|Description|string, interger|xxxxxxx|100|50|Gives A brief Description of the artist|Linkin park is a Nu-metal, alternative-metal, pop band founded in 1998. They have an overall popularity of 90% and currently have 29496112 followers.|must be a valid date and correct format|
+|Images|string(URL), binary|URL format, Image|500|200|Gives the URL and images of the artist|<img src="https://i.scdn.co/image/ab6761610000e5eba49c7eec5131a21a0bfb737b" alt="drawing" width="500"/>|Must be either an image or string of URL|
 
 ## Development and Integration
 ---
