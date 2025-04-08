@@ -22,7 +22,7 @@ To run this program, you need to install the following dependencies:
 - `requests` to make HTTP requests to the Spotify API
 
 ### Install dependencies
-To install the required dependencies, you can run
+To install the required dependencies, you can run:
 
 ```bash
 pip install -r requirements.txt
