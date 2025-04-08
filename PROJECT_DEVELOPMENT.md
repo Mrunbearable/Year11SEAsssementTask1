@@ -39,10 +39,10 @@
 ## Functional Specifications
 --- 
 ### User Requirements
-The user should easily be able to navigate the program. This statements only applies if the user is allowed access. The user should be allowed to manage and change the themes of GUI according to her prefrences. The user should also be allowed to choose according to their preferences
+The user should easily be able to navigate the program. This statement only applies if the user is allowed access. The user should be allowed to manage and change the themes of GUI according to her prefrences. The user should also be allowed to choose according to their preferences
 
 ### Inputs and Outputs
-The user be be able to input what data/information they are trying to find. In respone the GUI should output the info back. The user should be able to press any button they want and the respective button should output it respective purpose
+The user be be able to input what data/information they are trying to find. In response the GUI should output the info back. The user should be able to press any button they want and the respective button should output it respective purpose
 
 ### Core Features
 The main purpose of this GUI is to proivde users with finding data easily. Buttons and commands must be easy to navigate and should not redirect to a different route. It is critical that this GUI meets user request otherwise the GUI is faulty and should not continue. This Gui should be enjoyable and legible for the end-user to use and not be a mess.
@@ -59,10 +59,10 @@ The GUI should not crash and hand common errors gracefully. If there is an error
 The GUI/program has to be effient in loading up and user-requests. The API must not output errors and only output the needs of the end-users. To ensure our GUI remains effienct, the GUI should always be updated and run to its latest version
 
 ### Useability/Accessibility
-The GUI/program should be advertised and marketed to gather a bigger audience. The API should not be simple and should include many features so that the end-users have a wide range of options. The Program shouldn't crash/encounter errors.
+The GUI/program should be advertised and marketed to gather a bigger audience. The API should not be simple and should include many features so that the end-users have a wide range of options. The Program shouldn't crash/encounter errors. The developer and end-user should be able to access the GUI when needed. 
 
 ### Reliability
-The GUI/program should always be updated to its latest version to lower to probability of the program encountering errors. The program should handle errors gracefully. The program should only be downloaded from a trustworthy publisher
+The GUI/program should always be updated to its latest version to lower to probability of the program encountering errors. The program should handle errors gracefully. The program should only be downloaded from a trustworthy publisher. The developer has to ensure that the GUI can run smoothly for the end-users
 
 Actor: User(Preferably someone who wants to use the API)
 
