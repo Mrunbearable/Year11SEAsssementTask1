@@ -39,30 +39,30 @@
 ## Functional Specifications
 --- 
 ### User Requirements
-The user should easily be able to navigate the program. This statement only applies if the user is allowed access. The user should be allowed to manage and change the themes of GUI according to her prefrences. The user should also be allowed to choose according to their preferences
+The user should easily be able to navigate the program. This statement only applies if the user is allowed access. The user should be allowed to manage and change the themes of GUI according to her prefrences. The user should also be allowed to choose according to their preferences.
 
 ### Inputs and Outputs
-The user be be able to input what data/information they are trying to find. In response the GUI should output the info back. The user should be able to press any button they want and the respective button should output it respective purpose
+The user be be able to input what data/information they are trying to find. In response the GUI should output the info back. The user should be able to press any button they want and the respective button should output it respective purpose.
 
 ### Core Features
 The main purpose of this GUI is to proivde users with finding data easily. Buttons and commands must be easy to navigate and should not redirect to a different route. It is critical that this GUI meets user request otherwise the GUI is faulty and should not continue. This Gui should be enjoyable and legible for the end-user to use and not be a mess.
 
 ### User Interaction
-The Data is be viewed on a GUI. They can either press buttons or search from the bar. The GUI will have multiple features allowing the user to also ask for help and exit. The Gui will keep running until the User Extis
+The Data is be viewed on a GUI. They can either press buttons or search from the bar. The GUI will have multiple features allowing the user to also ask for help and exit. The Gui will keep running until the User Exits.
 
 ### Error Handling
-The GUI should not crash and hand common errors gracefully. If there is an error it will restart the program and notify the devloper. There will be a help menu which will give suggestions/alternavtive to help resolves issues through the GUI. The developer should be aware of these issues so he can fix them to create a more enjoyable experience
+The GUI should not crash and hand common errors gracefully. If there is an error it will restart the program and notify the devloper. There will be a help menu which will give suggestions/alternavtive to help resolves issues through the GUI. The developer should be aware of these issues so he can fix them to create a more enjoyable experience.
 
 ## Non-Functional Specfications
 ---
 ### Performance
-The GUI/program has to be effient in loading up and user-requests. The API must not output errors and only output the needs of the end-users. To ensure our GUI remains effienct, the GUI should always be updated and run to its latest version
+The GUI/program has to be effient in loading up and user-requests. The API must not output errors and only output the needs of the end-users. To ensure our GUI remains effienct, the GUI should always be updated and run to its latest version.
 
 ### Useability/Accessibility
 The GUI/program should be advertised and marketed to gather a bigger audience. The API should not be simple and should include many features so that the end-users have a wide range of options. The Program shouldn't crash/encounter errors. The developer and end-user should be able to access the GUI when needed. 
 
 ### Reliability
-The GUI/program should always be updated to its latest version to lower to probability of the program encountering errors. The program should handle errors gracefully. The program should only be downloaded from a trustworthy publisher. The developer has to ensure that the GUI can run smoothly for the end-users
+The GUI/program should always be updated to its latest version to lower to probability of the program encountering errors. The program should handle errors gracefully. The program should only be downloaded from a trustworthy publisher. The developer has to ensure that the GUI can run smoothly for the end-users.
 
 Actor: User(Preferably someone who wants to use the API)
 
@@ -169,6 +169,179 @@ Variable|Data Type|Format for Display|Size in Bytes|Size for Display|Description
 |Description|string, interger|xxxxxxx|100|2|Gives A brief Description of the artist|Linkin park is a Nu-metal, alternative-metal, pop band founded in 1998. They have an overall popularity of 90% and currently have 29496112 followers|must be a valid date and correct format|
 |Images|string(URL), binary|URL format, Image|500|200|Gives the url and images of the artist|<img src="https://i.scdn.co/image/ab6761610000e5eba49c7eec5131a21a0bfb737b" alt="drawing" width="500"/>|Must be either an image or string of url
 
+## Development and Integration
+---
+### Old UI
+---
+```
+import tkinter as tk
+from tkinter import *
+from dotenv import load_dotenv
+import os
+import base64
+from requests import post, get
+import json
+
+load_dotenv()
+
+client_id = os.getenv("CLIENT_ID")
+client_secret = os.getenv("CLIENT_SECRET")
+
+def get_token():
+    auth_string = str(client_id) + ":" + str(client_secret)
+    auth_bytes = auth_string.encode("utf-8")
+    auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
+
+    url = "https://accounts.spotify.com/api/token"
+    headers = {
+        "Authorization": "Basic " + auth_base64,
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    data = {"grant_type": "client_credentials"} 
+    result = post(url, headers=headers, data=data)
+    json_result = json.loads(result.content)
+    token = json_result["access_token"]
+    return token
+
+def get_auth_header(token):
+    return {"Authorization": "Bearer " + token}
+
+def search_for_artist(token, artist_name):
+    url = "https://api.spotify.com/v1/search"
+    headers = get_auth_header(token)
+    query = f"?q={artist_name}&type=artist&limit=2"
+
+    query_url = url + query
+    result = get(query_url, headers=headers)
+    json_result = json.loads(result.content)["artists"]["items"]
+
+    if len(json_result) ==0:
+        print("No artist with this name exists...")
+        return None
+    
+    return json_result[0]
+
+def get_songs_by_artist(token, artist_id):
+    url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks?country=US"
+    headers = get_auth_header(token)
+    result = get(url, headers=headers)
+    json_result = json.loads(result.content)["tracks"]
+    return json_result
+
+def get_albums_by_artist(token, artist_id):
+    url = f"https://api.spotify.com/v1/artists/{artist_id}/albums?country=US"
+    headers = get_auth_header(token)
+    result = get(url, headers=headers)
+    json_result = json.loads(result.content)["items"]
+    return json_result
+
+def get_artist_description(token, artist_id):
+    url = f"https://api.spotify.com/v1/artists/{artist_id}"
+    headers = get_auth_header(token)
+    result = get(url, headers=headers)
+    json_result = json.loads(result.content)
+    genres = json_result.get("genres", [])
+    popularity = json_result.get("popularity", [])
+    followers = json_result.get("followers", {}).get("total","N/A")
+    description = f"Genres: {genres} \n" 
+    description += f"Popularity: {popularity}% \n"
+    description += f"Followers: {followers} followers\n"
+    return description
+
+def get_artist_image(token, artist_id):
+    url = f"https://api.spotify.com/v1/artists/{artist_id}"
+    headers = get_auth_header(token)
+    result = get(url, headers=headers)
+    json_result = json.loads(result.content)["images"]
+    return json_result
+
+token = get_token()
+
+while True:    
+    user_need = input("What artist would you like to know about? ")
+    print(f"What would you like to know about {user_need}? Enter a Number")
+    print("1. Top Tracks by Artist ")
+    print("2. Albums by the Artist ")
+    print("3. Description of Artist")
+    print("4. Images of the Artist ")
+    print("5. End Program")
+    response = int(input("Enter a Number "))
+
+    result = search_for_artist(token, user_need)
+    artist_id = result["id"]
+
+    if response == 1:
+        songs = get_songs_by_artist(token, artist_id)
+        for idx, song in enumerate(songs):
+            print(f"{idx + 1}. {song['name']}")
+    elif response == 2:
+        albums = get_albums_by_artist(token, artist_id)
+        for idx, album in enumerate(albums):
+            print(f"{idx + 1}. {album['name']} (Released: {album['release_date']})")
+    elif response == 3:
+        biography = get_artist_description(token, artist_id)
+        print(biography)
+    elif response == 4:
+        images = get_artist_image(token, artist_id)
+        print(images)
+    else:
+        print("ending Program")
+        break
+
+    learn_more = input("Would you like to learn more about this artist (yes/no)?: ")
+    if learn_more != "yes":
+        print("Ending Program")
+        break
+```
+### Testing will New API Authorization and Search Artist Function
+---
+```
+from dotenv import load_dotenv
+import os
+import base64
+from requests import post, get
+import json
+
+load_dotenv()
+
+client_id = os.getenv("CLIENT_ID")
+client_secret = os.getenv("CLIENT_SECRET")
+
+def get_token():
+    auth_string = str(client_id) + ":" + str(client_secret)
+    auth_bytes = auth_string.encode("utf-8")
+    auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
+
+    url = "https://accounts.spotify.com/api/token"
+    headers = {
+        "Authorization": "Basic " + auth_base64,
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    data = {"grant_type": "client_credentials"} 
+    result = post(url, headers=headers, data=data)
+    json_result = json.loads(result.content)
+    token = json_result["access_token"]
+    return token
+
+def get_auth_header(token):
+    return{"Authorization": "Bearer " + token}
+
+def search_for_artist(token, artist_name):
+    url = "https://api.spotify.com/v1/search"
+    headers = get_auth_header(token)
+    query = f"q={artist_name}&type=artist&limit=1"
+
+    query_url = url + query
+    result = get(query_url, headers=headers)
+    json_result = json.loads(result.content)
+    print(json_result)
+
+token = get_token() 
+search_for_artist(token, "ACDC")
+```
+
 ## Testing and Debugging
 ---
 ### Intial commit/First commit (29/03/2025)
@@ -177,7 +350,7 @@ After problems with many API, i decided to try the spotify API. I went to https:
 
 ### Second commit (30/03/2025)
 ---
-i continue working on my code to obtain an access token/ API key from Spotify API. i created a seperate main.py called main1.py to test the UI (later deleted). i faced many challenged including typos and f strings, leading to my UI completely crashing. I was very hesitant and worried if the UI wouldn't work, leading me to overthink and research for other APIs  By the end of the day i had finished the UI for the access token/ API key from the Spotify API
+i continue working on my code to obtain an access token/ API key from Spotify API. i created a seperate main.py called main1.py to test the UI (later deleted). i faced many challenged including typos and f strings, leading to my UI completely crashing. I was very hesitant and worried if the UI wouldn't work, leading me to overthink and research for other APIs  By the end of the day i had finished the UI for the access token/ API key from the Spotify API.
 
 ### Third commit (30/03/2025)
 ---
@@ -185,31 +358,32 @@ After i was able to obtain an access token/ API key from Spotify API, i started 
 
 ### Fourth commit (31/03/2025)
 ---
-I felt that i need to create more functions so the end-user had more flexibilty while running the UI. Two more functions were created, Description, displaying a brief description of the genre, popularity and followers of the artist and Images, dislpaying the images of the Artist in different sizes. The Spofity Api didn't provide a description for the artist so i took subheading to create a description for the Artist. I also Made a start on the UI of the Terminal. My UI used "While" and "IF" to display the info in the terminal and create a function which would ask the user if they wanted to learn more about the artist
+I felt that i need to create more functions so the end-user had more flexibilty while running the UI. Two more functions were created, Description, displaying a brief description of the genre, popularity and followers of the artist and Images, dislpaying the images of the Artist in different sizes. The Spofity Api didn't provide a description for the artist so i took subheading to create a description for the Artist. I also Made a start on the UI of the Terminal. My UI used "While" and "IF" to display the info in the terminal and create a function which would ask the user if they wanted to learn more about the artist.
 
 ### Fifth commit (01/04/2025)
 ---
-I felt like i had the potential to make a GUi and not be basic, so i did research and found out tkinter was the easiest application to make and GUI. I had to change each functions "IF" statement to "DEF" function so it could be layout in the GUI. i also create custom Fonts and used colours to customised my API to match Spotify. During this stage, i encountered a lot of problems with the display in the GUI, including buttons not showing up an the code crashing during the run-time. I Create a Button for Exiting and the GUI was finished by the end of the Day
+I felt like i had the potential to make a GUi and not be basic, so i did research and found out tkinter was the easiest application to make and GUI. I had to change each functions "IF" statement to "DEF" function so it could be layout in the GUI. i also create custom Fonts and used colours to customised my API to match Spotify. During this stage, i encountered a lot of problems with the display in the GUI, including buttons not showing up an the code crashing during the run-time. I Create a Button for Exiting and the GUI was finished by the end of the Day.
 
 ### Six commit (02/04/2025)
 ---
-After finsihing my GUI, i decided to do testing and debugging to find any errors which came up. I did a lot of customised and orgranised my code so it was legible. I also start to work on the comments on my GUI but decided i would do it later. I would start to redo my theory from here
+After finsihing my GUI, i decided to do testing and debugging to find any errors which came up. I did a lot of customised and orgranised my code so it was legible. I also start to work on the comments on my GUI but decided i would do it later. I would start to redo my theory from here.
 
 ### Seven commit(08/04/2025)
 ---
-It is almost the due date of the assessment so i did some last minute check up. i add a help function which would display options for trying to reslove issues which may encounter while running the GUI. I also move the help button and exit button to the left side of the screen. i finish writing the comments and docstrings for the GUI
+It is almost the due date of the assessment so i did some last minute check up. i add a help function which would display options for trying to reslove issues which may encounter while running the GUI. I also move the help button and exit button to the left side of the screen. i finish writing the comments and docstrings for the GUI.
+
 ## Peer Evaluation
 ---
 ### Chris
 Stephan's GUI had multiple features so that when you type in the artist name wrong it gives similier artist names. However the GUI screen could be further improved so that it won't be an eye sore to the users. The API that he used is unique as other people would not have thought of using it.
 
 ### Barry
-Stephan's program works great, and looks visually appealing. It efficiently runs and functions as it's supposed to. Very useful in finding artists 10/10 would recommend
+Stephan's program works great, and looks visually appealing. It efficiently runs and functions as it's supposed to. Very useful in finding artists 10/10 would recommend.
 
 ## Maintenance
 ---
 My API wouldn't require much maintenance as Spotify has its own maintenance team but their would still be maintenance in my own GUI. If The Spotify API were to change overtime, i would occassionally check in with the https://developer.spotify.com/ webpage to ajdust my GUI with any issues. This is to ensure that my GUI is working effiently and perfectly, If the programs released new verison, i would ensure that all my functions and libraries were updated and worked. This is to ensure that the program doesn't crash when it is updated. If i found a bug in my GUI after deployment, i would announce that the GUI is under maintence and do some further research and debugging into why the program isn't running as intended. I would maintain clear documentation and ensure the program remains easy to update in the future by storing older version of the program and making it evident each time something is edited.
 ## Final Evaluation
 ---
-I felt very proud and confident on how i work through this assessment task. I have created a Gui with many functions with its main goal to provide information for its end users. In relation to the waterfall approach, i took more of a river approach, doing one section then another section and redoing another section but towards the end i started doing the waterfall approach. Linking back to it functional and non functional requirements, i felt like the GUI achieved most of these requirements, but didn't address gaining feedback from end-users and accessibilty options for the disabled I felt like my time management for this assessment for this assessment task was oustanding as i didn't have to rush my work and felt like my work had potential. The only time my time managment was horrible was when i couldn't find an API which would work which left me far behind the class, right before i realised i didn't have much time. I had completed the theory and pratical of this assessment to the best of my potential, trying my hardest. Some problems i faced with my API was being able to generate a visual image inside the GUI and restricting the ability to write in the result box. I feel like my data dictionary and functional and non-functional specifications could be better but i am glad to have created such a program. This program has the potential to have on-going updates and improvements so that end-users can have a more enjoyable experience. At the same time this could lead to more threats and bugs but the GUI will be improved for the greater good of end-users
+I felt very proud and confident on how i work through this assessment task. I have created a Gui with many functions with its main goal to provide information for its end users. In relation to the waterfall approach, i took more of a river approach, doing one section then another section and redoing another section but towards the end i started doing the waterfall approach. Linking back to it functional and non functional requirements, i felt like the GUI achieved most of these requirements, but didn't address gaining feedback from end-users and accessibilty options for the disabled I felt like my time management for this assessment for this assessment task was oustanding as i didn't have to rush my work and felt like my work had potential. The only time my time managment was horrible was when i couldn't find an API which would work which left me far behind the class, right before i realised i didn't have much time. I had completed the theory and pratical of this assessment to the best of my potential, trying my hardest. Some problems i faced with my API was being able to generate a visual image inside the GUI and restricting the ability to write in the result box. I feel like my data dictionary and functional and non-functional specifications could be better but i am glad to have created such a program. This program has the potential to have on-going updates and improvements so that end-users can have a more enjoyable experience. At the same time this could lead to more threats and bugs but the GUI will be improved for the greater good of end-users.
 
