@@ -1,6 +1,6 @@
 # Year10AsssementTask1
 ## Spofity Artist API
-#### Create by Stephen Wirianata
+#### Created by Stephen Wirianata
 
 This is a Python Program design to help end-users gather data about their favourite artist. This Python Program is formatted in a GUI and uses -dotenv and requests. You have many accessible options ranging from the top tracks by an artist to images of an artist. 
 
